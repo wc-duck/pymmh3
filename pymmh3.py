@@ -59,11 +59,11 @@ def hash( key, seed = 0x0 ):
     k1 = 0
     tail_size = length & 3
 
-    if tail_size == 3:
+    if tail_size >= 3:
         k1 ^= key[ tail_index + 2 ] << 16
-    if tail_size == 2:
+    if tail_size >= 2:
         k1 ^= key[ tail_index + 1 ] << 8
-    if tail_size == 1:
+    if tail_size >= 1:
         k1 ^= key[ tail_index + 0 ]
     
     if tail_size != 0:
