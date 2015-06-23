@@ -26,11 +26,12 @@ int main( int argc, const char** argv )
 	char* l;
 	while( ( l = fgets( buffer, 2048, f ) ) != 0x0 )
 	{
-		uint32_t res;
-		mmh3::MurmurHash3_x86_32( l, strlen(l), 0, &res );
-		fprintf( out1, "%s0x%08X\n", l, res );
-		mmh3::MurmurHash3_x86_32( l, strlen(l), 0x1234ABCD, &res );
-		fprintf( out2, "%s0x%08X\n", l, res );
+		uint32_t res1;
+		uint32_t res2;
+		mmh3::MurmurHash3_x86_32( l, strlen(l), 0, &res1 );
+		fprintf( out1, "%s0x%08X\n", l, res1 );
+		mmh3::MurmurHash3_x86_32( l, strlen(l), 0x1234ABCD, &res2 );
+		fprintf( out2, "%s0x%08X\n", l, res2 );
 	}
 
 	fclose( f );
