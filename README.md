@@ -1,5 +1,7 @@
 # PYMMH3 - a pure python MurmurHash3 implementation.
 
+[![Build Status](https://travis-ci.org/wc-duck/pymmh3.svg?branch=master)](https://travis-ci.org/wc-duck/pymmh3)
+
 ## About:
 This is a pure python implementation of the murmur3 hash algorithm <https://code.google.com/p/smhasher/wiki/MurmurHash3>
 written for the times when you do not want to muck about building and installing c-modules etc.

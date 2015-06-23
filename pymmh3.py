@@ -17,6 +17,13 @@ This module is written to have the same format as mmh3 python package found here
 https://pypi.python.org/pypi/mmh3/2.0 
 '''
 
+import sys
+
+if (sys.version_info > (3, 0)):
+    def xrange( a, b, c ):
+        return range( a, b, c )
+
+
 def hash( key, seed = 0x0 ):
     ''' implements 32bit murmur3 hash. '''
 
@@ -31,7 +38,7 @@ def hash( key, seed = 0x0 ):
         return h;
 
     length = len( key )
-    nblocks = length / 4
+    nblocks = int( length / 4 )
 
     h1 = seed;
 
@@ -85,4 +92,4 @@ if __name__ == "__main__":
     opts = parser.parse_args()
     
     for str_to_hash in opts.strings:
-        print '"%s" = 0x%08X' % ( str_to_hash, hash( str_to_hash ) )
+        sys.stdout.write( '"%s" = 0x%08X\n' % ( str_to_hash, hash( str_to_hash ) ) )
