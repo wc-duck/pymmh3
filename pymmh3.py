@@ -61,23 +61,14 @@ def hash( key, seed = 0x0 ):
 
     if tail_size == 3:
         k1 ^= key[ tail_index + 2 ] << 16
+    if tail_size == 2:
         k1 ^= key[ tail_index + 1 ] << 8
+    if tail_size == 1:
         k1 ^= key[ tail_index + 0 ]
+    
+    if tail_size != 0:
         k1  = ( k1 * c1 ) & 0xFFFFFFFF
-        k1  = ( k1 << 16 | k1 >> 16 ) & 0xFFFFFFFF # _ROTL32
-        k1  = ( k1 * c2 ) & 0xFFFFFFFF
-        h1 ^= k1
-    elif tail_size == 2:
-        k1 ^= key[ tail_index + 1 ] << 8
-        k1 ^= key[ tail_index + 0 ]
-        k1  = ( k1 * c1 ) & 0xFFFFFFFF
-        k1  = ( k1 << 16 | k1 >> 16 ) & 0xFFFFFFFF # _ROTL32
-        k1  = ( k1 * c2 ) & 0xFFFFFFFF
-        h1 ^= k1
-    elif tail_size == 1:
-        k1 ^= key[ tail_index + 0 ]
-        k1  = ( k1 * c1 ) & 0xFFFFFFFF
-        k1  = ( k1 << 16 | k1 >> 16 ) & 0xFFFFFFFF # _ROTL32
+        k1  = ( k1 << 15 | k1 >> 17 ) & 0xFFFFFFFF # _ROTL32
         k1  = ( k1 * c2 ) & 0xFFFFFFFF
         h1 ^= k1
 
