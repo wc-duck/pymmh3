@@ -7,10 +7,12 @@ This is a pure python implementation of the murmur3 hash algorithm <https://code
 written for the times when you do not want to muck about building and installing c-modules etc.
 
 As this is pure python performance is FAR from optimal and if that is required a real c-module such as the
-one found here at <https://pypi.python.org/pypi/mmh3/2.0> is absolutely suggested!
+one found here at <https://pypi.python.org/pypi/mmh3/2.3.1> is absolutely suggested!
 
 ## Performance:
 Bad... we need not say more ;)
+
+But with pypy(<http://pypy.org>) it is blazing fast compared to mmh3 :D
 
 ## Testing:
 Tested by hashing all lines in Jane Eyre by Charlotte Bronte in both c and with pymmh3.
