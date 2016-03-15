@@ -17,11 +17,11 @@ This module is written to have the same format as mmh3 python package found here
 https://pypi.python.org/pypi/mmh3/2.3.1
 '''
 
-import sys
-if (sys.version_info > (3, 0)):
+import sys as _sys
+if (_sys.version_info > (3, 0)):
     def xrange( a, b, c ):
         return range( a, b, c )
-del sys
+del _sys
 
 def hash( key, seed = 0x0 ):
     ''' Implements 32bit murmur3 hash. '''
