@@ -18,14 +18,13 @@ https://pypi.python.org/pypi/mmh3/2.3.1
 '''
 
 import sys
-
 if (sys.version_info > (3, 0)):
     def xrange( a, b, c ):
         return range( a, b, c )
-
+del sys
 
 def hash( key, seed = 0x0 ):
-    ''' implements 32bit murmur3 hash. '''
+    ''' Implements 32bit murmur3 hash. '''
 
     key = bytearray( key )
 
@@ -83,8 +82,9 @@ def hash( key, seed = 0x0 ):
     return fmix( h1 ^ length )
 
 def hash128( key, seed = 0x0, x64arch = True ):
+    ''' Implements 128bit murmur3 hash. '''
     def hash128_x64( key, seed ):
-        ''' implements 128bit murmur3 hash for x64. '''
+        ''' Implements 128bit murmur3 hash for x64. '''
 
         key = bytearray( key )
 
@@ -210,7 +210,7 @@ def hash128( key, seed = 0x0, x64arch = True ):
         return ( h2 << 64 | h1 )
 
     def hash128_x86( key, seed ):
-        ''' implements 128bit murmur3 hash for x86. '''
+        ''' Implements 128bit murmur3 hash for x86. '''
 
         key = bytearray( key )
 
@@ -392,12 +392,25 @@ def hash128( key, seed = 0x0, x64arch = True ):
         return hash128_x86( key, seed )
 
 def hash64( key, seed = 0x0, x64arch = True ):
-    ''' implements 64bit murmur3 hash. '''
+    ''' Implements 64bit murmur3 hash. Returns a tuple. '''
 
     hash_128 = hash128( key, seed, x64arch )
 
     return ( hash_128 & 0xFFFFFFFFFFFFFFFF , ( hash_128 >> 64 ) & 0xFFFFFFFFFFFFFFFF )
 
+def hash_bytes( key, seed = 0x0, x64arch = True ):
+    ''' Implements 128bit murmur3 hash. Returns a byte string. '''
+
+    hash_128 = hash128( key, seed, x64arch )
+
+    bytestring = ''
+
+    for i in xrange(0, 16, 1):
+        lsbyte = hash_128 & 0xFF
+        bytestring = bytestring + str( chr( lsbyte ) )
+        hash_128 = hash_128 >> 8
+
+    return bytestring
 
 if __name__ == "__main__":
     import argparse
