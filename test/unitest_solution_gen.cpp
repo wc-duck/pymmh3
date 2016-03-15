@@ -1,6 +1,6 @@
 /**
- * pymmh3 was written by Fredrik Kihlander, and is placed in the public
- * domain. The author hereby disclaims copyright to this source code.
+ * pymmh3 was written by Fredrik Kihlander and enhanced by Swapnil Gusani, and is placed in the public
+ * domain. The authors hereby disclaim copyright to this source code.
  *
  * This is a hacky program to generate hashes to test against in the unittests.
  *
