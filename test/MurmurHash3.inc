@@ -16,20 +16,25 @@
 
 #if defined(_MSC_VER)
 
-#define FORCE_INLINE    __forceinline
+#define FORCE_INLINE __forceinline
 
 #include <stdlib.h>
 
-#define ROTL32(x,y)     _rotl(x,y)
-#define ROTL64(x,y)     _rotl64(x,y)
+#define ROTL32(x,y) _rotl(x,y)
+#define ROTL64(x,y) _rotl64(x,y)
 
 #define BIG_CONSTANT(x) (x)
 
 // Other compilers
 
-#else   // defined(_MSC_VER)
+#else // defined(_MSC_VER)
 
-#define FORCE_INLINE __attribute__((always_inline))
+#if defined(__GNUC__) && ((__GNUC__ > 4) || (__GNUC__ == 4 && GNUC_MINOR >= 4))
+/* gcc version >= 4.4 4.1 = RHEL 5, 4.4 = RHEL 6. Don't inline for RHEL 5 gcc which is 4.1*/
+#define FORCE_INLINE inline __attribute__((always_inline))
+#else
+#define FORCE_INLINE
+#endif
 
 inline uint32_t rotl32 ( uint32_t x, int8_t r )
 {
@@ -41,8 +46,8 @@ inline uint64_t rotl64 ( uint64_t x, int8_t r )
   return (x << r) | (x >> (64 - r));
 }
 
-#define ROTL32(x,y)     rotl32(x,y)
-#define ROTL64(x,y)     rotl64(x,y)
+#define ROTL32(x,y) rotl32(x,y)
+#define ROTL64(x,y) rotl64(x,y)
 
 #define BIG_CONSTANT(x) (x##LLU)
 
@@ -99,8 +104,8 @@ void MurmurHash3_x86_32 ( const void * key, int len,
 
   uint32_t h1 = seed;
 
-  uint32_t c1 = 0xcc9e2d51;
-  uint32_t c2 = 0x1b873593;
+  const uint32_t c1 = 0xcc9e2d51;
+  const uint32_t c2 = 0x1b873593;
 
   //----------
   // body
@@ -158,10 +163,10 @@ void MurmurHash3_x86_128 ( const void * key, const int len,
   uint32_t h3 = seed;
   uint32_t h4 = seed;
 
-  uint32_t c1 = 0x239b961b; 
-  uint32_t c2 = 0xab0e9789;
-  uint32_t c3 = 0x38b34ae5; 
-  uint32_t c4 = 0xa1e38b93;
+  const uint32_t c1 = 0x239b961b;
+  const uint32_t c2 = 0xab0e9789;
+  const uint32_t c3 = 0x38b34ae5;
+  const uint32_t c4 = 0xa1e38b93;
 
   //----------
   // body
@@ -261,8 +266,8 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
   uint64_t h1 = seed;
   uint64_t h2 = seed;
 
-  uint64_t c1 = BIG_CONSTANT(0x87c37b91114253d5);
-  uint64_t c2 = BIG_CONSTANT(0x4cf5ad432745937f);
+  const uint64_t c1 = BIG_CONSTANT(0x87c37b91114253d5);
+  const uint64_t c2 = BIG_CONSTANT(0x4cf5ad432745937f);
 
   //----------
   // body
@@ -332,3 +337,4 @@ void MurmurHash3_x64_128 ( const void * key, const int len,
 }
 
 //-----------------------------------------------------------------------------
+
