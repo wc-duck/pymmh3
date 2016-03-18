@@ -28,7 +28,8 @@ class Testpymmh3( unittest.TestCase ):
         with open( os.path.join( file_dir, 'pg1260.txt' ), 'rb' ) as test_file:
             for l in test_file.readlines():
                 s = solution[l]
-                r = pymmh3.hash( l )
+                # A negative value in python has an infinite number of leading 1's in binary unlike c++ where only MSB is 1 in 2's complement form.
+                r = pymmh3.hash( l ) & 0xFFFFFFFF
                 self.assertEqual( s, r, 'different hash for line: "%s"\n0x%08X != 0x%08X' % ( l, s, r ) )
 
     def test_32bit_basic_bytearray( self ):
@@ -37,7 +38,7 @@ class Testpymmh3( unittest.TestCase ):
         with open( os.path.join( file_dir, 'pg1260.txt' ), 'rb' ) as test_file:
             for l in test_file.readlines():
                 s = solution[l]
-                r = pymmh3.hash( bytearray( l ) )
+                r = pymmh3.hash( bytearray( l ) ) & 0xFFFFFFFF
                 self.assertEqual( s, r, 'different hash for line: "%s"\n0x%08X != 0x%08X' % ( l, s, r ) )
 
     def test_32bit_custom_seed_string( self ):
@@ -46,7 +47,7 @@ class Testpymmh3( unittest.TestCase ):
         with open( os.path.join( file_dir, 'pg1260.txt' ), 'rb' ) as test_file:
             for l in test_file.readlines():
                 s = solution[l]
-                r = pymmh3.hash( l, seed = 0x1234ABCD )
+                r = pymmh3.hash( l, seed = 0x1234ABCD ) & 0xFFFFFFFF
                 self.assertEqual( s, r, 'different hash for line: "%s"\n0x%08X != 0x%08X' % ( l, s, r ) )
 
     def test_32bit_custom_seed_bytearray( self ):
@@ -55,7 +56,7 @@ class Testpymmh3( unittest.TestCase ):
         with open( os.path.join( file_dir, 'pg1260.txt' ), 'rb' ) as test_file:
             for l in test_file.readlines():
                 s = solution[l]
-                r = pymmh3.hash( bytearray( l ), seed = 0x1234ABCD )
+                r = pymmh3.hash( bytearray( l ), seed = 0x1234ABCD ) & 0xFFFFFFFF
                 self.assertEqual( s, r, 'different hash for line: "%s"\n0x%08X != 0x%08X' % ( l, s, r ) )
 
     def test_128bit_x86_basic_string( self ):
@@ -100,7 +101,7 @@ class Testpymmh3( unittest.TestCase ):
         with open( os.path.join( file_dir, 'pg1260.txt' ), 'rb' ) as test_file:
             for l in test_file.readlines():
                 s = solution[l]
-                r = pymmh3.hash128( l , x64arch = True )
+                r = pymmh3.hash128( l, x64arch = True )
                 self.assertEqual( s, r, 'different hash for line: "%s"\n0x%08X != 0x%08X' % ( l, s, r ) )
 
     def test_128bit_x64_basic_bytearray( self ):

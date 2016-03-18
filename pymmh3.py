@@ -23,6 +23,7 @@ if (_sys.version_info > (3, 0)):
         return range( a, b, c )
 del _sys
 
+
 def hash( key, seed = 0x0 ):
     ''' Implements 32bit murmur3 hash. '''
 
@@ -79,7 +80,12 @@ def hash( key, seed = 0x0 ):
         h1 ^= k1
 
     #finalization
-    return fmix( h1 ^ length )
+    unsigned_val = fmix( h1 ^ length )
+    if unsigned_val & 0x80000000 == 0:
+        return unsigned_val
+    else:
+        return -( (unsigned_val ^ 0xFFFFFFFF) + 1 )
+
 
 def hash128( key, seed = 0x0, x64arch = True ):
     ''' Implements 128bit murmur3 hash. '''
@@ -391,12 +397,26 @@ def hash128( key, seed = 0x0, x64arch = True ):
     else:
         return hash128_x86( key, seed )
 
+
 def hash64( key, seed = 0x0, x64arch = True ):
     ''' Implements 64bit murmur3 hash. Returns a tuple. '''
 
     hash_128 = hash128( key, seed, x64arch )
 
-    return ( hash_128 & 0xFFFFFFFFFFFFFFFF , ( hash_128 >> 64 ) & 0xFFFFFFFFFFFFFFFF )
+    unsigned_val1 = hash_128 & 0xFFFFFFFFFFFFFFFF
+    if unsigned_val1 & 0x8000000000000000 == 0:
+        signed_val1 = unsigned_val1
+    else:
+        signed_val1 = -( (unsigned_val1 ^ 0xFFFFFFFFFFFFFFFF) + 1 )
+
+    unsigned_val2 = ( hash_128 >> 64 ) & 0xFFFFFFFFFFFFFFFF
+    if unsigned_val2 & 0x8000000000000000 == 0:
+        signed_val2 = unsigned_val2
+    else:
+        signed_val2 = -( (unsigned_val2 ^ 0xFFFFFFFFFFFFFFFF) + 1 )
+
+    return ( int( signed_val1 ), int( signed_val2 ) )
+
 
 def hash_bytes( key, seed = 0x0, x64arch = True ):
     ''' Implements 128bit murmur3 hash. Returns a byte string. '''
@@ -411,6 +431,7 @@ def hash_bytes( key, seed = 0x0, x64arch = True ):
         hash_128 = hash_128 >> 8
 
     return bytestring
+
 
 if __name__ == "__main__":
     import argparse
