@@ -30,16 +30,16 @@ int main( int argc, const char** argv )
     char* l;
     while( ( l = fgets( buffer, 2048, f ) ) != 0x0 )
     {
-        uint32_t res1;
-        uint32_t res2;
+        int32_t res1;
+        int32_t res2;
         uint32_t res3[4];
         uint32_t res4[4];
         uint32_t res5[4];
         uint32_t res6[4];
         mmh3::MurmurHash3_x86_32( l, strlen(l), 0, &res1 );
-        fprintf( out1, "%s0x%08X\n", l, res1 );
+        fprintf( out1, "%s%d\n", l, res1 );
         mmh3::MurmurHash3_x86_32( l, strlen(l), 0x1234ABCD, &res2 );
-        fprintf( out2, "%s0x%08X\n", l, res2 );
+        fprintf( out2, "%s%d\n", l, res2 );
         mmh3::MurmurHash3_x86_128( l, strlen(l), 0, res3 );
         fprintf( out3, "%s0x%08X%08X%08X%08X\n", l, res3[3], res3[2], res3[1], res3[0] );
         mmh3::MurmurHash3_x86_128( l, strlen(l), 0x1234ABCD, res4 );
