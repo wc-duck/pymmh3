@@ -21,13 +21,20 @@ import sys as _sys
 if (_sys.version_info > (3, 0)):
     def xrange( a, b, c ):
         return range( a, b, c )
+    def xencode(x):
+        if isinstance(x, bytes) or isinstance(x, bytearray):
+            return x
+        else:
+            return x.encode()
+else:
+    def xencode(x):
+        return x
 del _sys
-
 
 def hash( key, seed = 0x0 ):
     ''' Implements 32bit murmur3 hash. '''
 
-    key = bytearray( key )
+    key = bytearray( xencode(key) )
 
     def fmix( h ):
         h ^= h >> 16
@@ -91,8 +98,6 @@ def hash128( key, seed = 0x0, x64arch = True ):
     ''' Implements 128bit murmur3 hash. '''
     def hash128_x64( key, seed ):
         ''' Implements 128bit murmur3 hash for x64. '''
-
-        key = bytearray( key )
 
         def fmix( k ):
             k ^= k >> 33
@@ -217,8 +222,6 @@ def hash128( key, seed = 0x0, x64arch = True ):
 
     def hash128_x86( key, seed ):
         ''' Implements 128bit murmur3 hash for x86. '''
-
-        key = bytearray( key )
 
         def fmix( h ):
             h ^= h >> 16
@@ -391,6 +394,8 @@ def hash128( key, seed = 0x0, x64arch = True ):
         h4 = ( h1 + h4 ) & 0xFFFFFFFF
 
         return ( h4 << 96 | h3 << 64 | h2 << 32 | h1 )
+
+    key = bytearray( xencode(key) )
 
     if x64arch:
         return hash128_x64( key, seed )
