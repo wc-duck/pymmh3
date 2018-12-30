@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pymmh3',
-    version='2.3.1',
+    version='2.5.1',
     packages=find_packages(),
     description='A pure python MurmurHash3 implementation.',
     classifiers=[
